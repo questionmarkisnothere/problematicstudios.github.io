@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Problematic Studios</title>
+  <style>
+    body {
+      background-color: black;
+      color: lime;
+      font-family: 'Courier New', Courier, monospace;
+      margin: 0;
+      padding: 0;
+    }
+
+    .terminal {
+      padding: 20px;
+      white-space: pre-wrap;
+    }
+
+    .image-corner {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      width: 150px;
+      z-index: 1;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    #output {
+      margin-bottom: 10px;
+    }
+
+    .line {
+      display: flex;
+      align-items: center;
+      font-family: monospace;
+    }
+
+    .prompt {
+      color: cyan;
+      margin-right: 5px;
+    }
+
+    #input-line {
+      display: inline;
+    }
+
+    .fake-cursor {
+      color: #00ff00;
+      animation: blink 1s steps(1) infinite;
+      margin-left: 2px;
+    }
+
+    .error {
+      color: red;
+    }
+
+    .meow {
+      color: magenta;
+    }
+
+    .cheese {
+      color: yellow;
+    }
+
+    a {
+      color: red;
+    }
+
+    ::selection {
+      background: lime;
+      color: black;
+    }
+
+    #terminal-input {
+      background: transparent;
+      border: none;
+      color: #00ff00;
+      outline: none;
+      caret-color: transparent; /* hides the default text cursor */
+      font-family: monospace;
+      font-size: 1em;
+      width: auto;
+    }
+  </style>
+</head>
+<body>
+  <img src="0001.png" alt="Problematic Studios Logo" class="image-corner">
+
+  <div class="terminal" id="terminal">
+    <div id="output">
+      <p><span style="color: cyan;">C:\Users\guest&gt;</span> echo Problematic Studios</p>
+      <p><span style="color: cyan;">C:\Users\guest&gt;</span> echo Starring: Wildfire, Questionmark, Other People Maybe</p>
+      <p><span style="color: cyan;">C:\Users\guest&gt;</span> don't ask about our scandals</p>
+    </div>
+    
+    <!-- Replaced old input with custom blinking cursor -->
+    <div class="line">
+      <span class="prompt">C:\Users\guest&gt;</span>
+      <span id="input-line"></span><span class="fake-cursor">█</span>
+    </div>
+  </div>
+
+  <!-- Typewriter sound -->
+  <audio id="typeSound" src="https://www.soundjay.com/mechanical/sounds/keyboard-1.mp3" preload="auto"></audio>
+
+  <script>
+    const inputLine = document.getElementById('input-line');
+    const terminal = document.getElementById('terminal');
+    const outputDiv = document.getElementById('output');
+    const typeSound = document.getElementById('typeSound');
+
+    document.addEventListener('keydown', function (e) {
+      e.preventDefault();
+      if (e.key.length === 1) {
+        inputLine.textContent += e.key;
+        typeSound.currentTime = 0;
+        typeSound.play();
+      } else if (e.key === 'Backspace') {
+        inputLine.textContent = inputLine.textContent.slice(0, -1);
+      } else if (e.key === 'Enter') {
+        const command = inputLine.textContent.trim().toLowerCase();
+        const commandLine = document.createElement('p');
+        commandLine.innerHTML = `<span style="color: cyan;">C:\\Users\\guest&gt;</span> ${inputLine.textContent}`;
+        outputDiv.appendChild(commandLine);
+        inputLine.textContent = '';
+
+        let response;
+
+        switch (command) {
+          case 'scandal':
+            response = document.createElement('p');
+            response.className = 'error';
+            response.textContent = 'ACCESS DENIED: FILES UNAVAILABLE. STOP ASKING.';
+            break;
+          case 'meow':
+            response = document.createElement('p');
+            response.className = 'meow';
+            response.textContent = 'Meow Meow Meow Meow Meow Meow Meow Meow Meow';
+            break;
+          case 'cheese':
+            response = document.createElement('p');
+            response.className = 'cheese';
+            response.textContent = '🧀🧀🧀 CHEESE OVERLOAD DETECTED 🧀🧀🧀';
+            break;
+          case 'youtube':
+            response = document.createElement('p');
+            response.className = 'error';
+            response.innerHTML = `ERROR: YouTube coming soon! <a href="https://www.youtube.com/@Problematicstuidos" target="_blank">Click here anyway</a>`;
+            break;
+          case 'help':
+            response = document.createElement('p');
+            response.className = 'error';
+            response.textContent = 'Error 42: Help is unavailable. Try yelling into the void.';
+            break;
+          default:
+            response = document.createElement('p');
+            response.textContent = `You typed: ${command}`;
+        }
+
+        outputDiv.appendChild(response);
+        terminal.scrollTop = terminal.scrollHeight;
+      }
+    });
+  </script>
+</body>
+</html>
